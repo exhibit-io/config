@@ -7,23 +7,31 @@ import (
 
 // Config holds all service configurations.
 type Config struct {
-	configs []Configurable
+	configs map[string]Configurable
 }
 
-// NewConfig initializes a new Config instance with default configurations.
-func New() *Config {
+// Default initializes a new Config instance with default configurations.
+func Default() *Config {
 	return &Config{
-		configs: []Configurable{
-			&RedisConfig{}, // Default configurations
-			&CorsConfig{},
+		configs: map[string]Configurable{
+			"redis":  &RedisConfig{}, // Default configurations
+			"cors":   &CorsConfig{},
+			"server": &ServerConfig{},
 			// Additional default configurations can be added here...
 		},
 	}
 }
 
+// New initializes an empty Config which needs to be populated with Configurable
+func New() *Config {
+	return &Config{
+		configs: map[string]Configurable{},
+	}
+}
+
 // Register allows adding external configurations.
-func (c *Config) Register(config Configurable) {
-	c.configs = append(c.configs, config)
+func (c *Config) Register(key string, config Configurable) {
+	c.configs[key] = config
 }
 
 // LoadConfig loads all registered configurations.
@@ -33,7 +41,7 @@ func (c *Config) LoadConfig() error {
 		log.Default().Print("No .env file found, using default environment variables.")
 	}
 
-	for _, config := range c.configs {
+	for key, config := range c.configs {
 		if err := config.Load(); err != nil {
 			return err
 		}
@@ -41,6 +49,7 @@ func (c *Config) LoadConfig() error {
 			return err
 
 		}
+		log.Printf("Loaded [%s] configuration.", key)
 	}
 
 	return nil
