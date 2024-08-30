@@ -54,3 +54,10 @@ func (c *Config) LoadConfig() error {
 
 	return nil
 }
+
+func (c Config) Get(key string) Configurable {
+	if config, ok := c.configs[key]; ok {
+		return config
+	}
+	return nil
+}
