@@ -39,6 +39,7 @@ func (c *Config) LoadConfig() error {
 		}
 		if err := config.Validate(); err != nil {
 			return err
+
 		}
 	}
 

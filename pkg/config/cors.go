@@ -10,10 +10,10 @@ type CorsConfig struct {
 
 // Load loads the CORS configuration from environment variables.
 func (c *CorsConfig) Load() error {
-	c.AllowedOrigins = getEnvAsSlice("CORS_ALLOWED_ORIGINS", []string{"*"}, ",")
-	c.AllowedMethods = getEnvAsSlice("CORS_ALLOWED_METHODS", []string{"GET", "POST"}, ",")
-	c.AllowedHeaders = getEnvAsSlice("CORS_ALLOWED_HEADERS", []string{"*"}, ",")
-	c.AllowCredentials = getEnvAsBool("CORS_ALLOW_CREDENTIALS", false)
+	c.AllowedOrigins = GetEnvAsSlice("CORS_ALLOWED_ORIGINS", []string{"*"}, ",")
+	c.AllowedMethods = GetEnvAsSlice("CORS_ALLOWED_METHODS", []string{"GET", "POST"}, ",")
+	c.AllowedHeaders = GetEnvAsSlice("CORS_ALLOWED_HEADERS", []string{"*"}, ",")
+	c.AllowCredentials = GetEnvAsBool("CORS_ALLOW_CREDENTIALS", false)
 	return nil
 }
 
