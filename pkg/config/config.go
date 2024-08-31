@@ -55,9 +55,15 @@ func (c *Config) LoadConfig() error {
 	return nil
 }
 
-func (c Config) Get(key string) Configurable {
+func GetConfig[T Configurable](c *Config, key string) (T, bool) {
 	if config, ok := c.configs[key]; ok {
-		return config
+		// Type assertion to the expected generic type T
+		if typedConfig, ok := config.(T); ok {
+			return typedConfig, true
+		}
 	}
-	return nil
+
+	// Return the zero value of T and false if the key doesn't exist or the type assertion fails
+	var zero T
+	return zero, false
 }
